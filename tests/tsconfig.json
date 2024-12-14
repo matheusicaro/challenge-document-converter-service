@@ -6,9 +6,9 @@
   },
   "include": [
     "../src/**/*",
-    "./*",
+    "./*", "unit/jest.setup.ts",
   ],
   "exclude": [
-    "jest.setup.ts",
+    "unit/jest.setup.ts",
   ]
 }

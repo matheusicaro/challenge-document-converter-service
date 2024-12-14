@@ -11,11 +11,14 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    "paths": {
+      "*": [
+        "*",
+        "node_modules/*",
+        "src/*"
+      ]
+    }
   },
-  "exclude": [
-    "node_modules",
-    "tests/*.test.ts"
-  ],
   "include": [
     "src/**/*",
   ],
