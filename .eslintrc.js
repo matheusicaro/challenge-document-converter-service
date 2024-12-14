@@ -1,11 +1,11 @@
 module.exports = {
-  ignorePatterns: [".eslintrc.js", "jest.config.js"],
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
     sourceType: "module",
+    project: ["./tsconfig.json", "./tests/tsconfig.json"],
   },
-  plugins: ["@typescript-eslint/eslint-plugin"],
+  plugins: ["@typescript-eslint"],
   extends: [
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
@@ -20,5 +20,12 @@ module.exports = {
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
+  },
+  settings: {
+    "import/resolver": {
+      node: {
+        extensions: [".ts", ".d.ts"],
+      },
+    },
   },
 };

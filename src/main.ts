@@ -1,11 +1,12 @@
-import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./configuration/app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { bodyParseToRawBody } from "./configuration/middlewares/raw-body.middleware";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  app.useGlobalPipes(new ValidationPipe());
+
+  app.use(bodyParseToRawBody);
 
   const config = new DocumentBuilder()
     .setTitle("Example API")
@@ -18,7 +19,10 @@ async function bootstrap() {
 
   await app.listen(3000);
 
+  console.log(`---------------`);
   console.log(`Application is running on: ${await app.getUrl()}`);
+  console.log(`Application docs: ${await app.getUrl()}/docs`);
+  console.log(`---------------`);
 }
 
 bootstrap();

@@ -1,9 +1,9 @@
 import { Module } from "@nestjs/common";
-import { AppController } from "../application/controllers/app.controller";
-import { AppProvider } from "../application/domain/providers/app.provider";
+import { DocumentsController } from "../application/controllers/documents.controller";
+import { registerProviders } from "./dependency-registries/repositories-registries";
 
 @Module({
-  controllers: [AppController],
-  providers: [AppProvider],
+  controllers: [DocumentsController],
+  providers: [...registerProviders()],
 })
 export class AppModule {}
