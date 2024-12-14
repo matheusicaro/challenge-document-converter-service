@@ -50,12 +50,12 @@ export class DocumentsController {
         },
       });
 
-      return result;
+      return response.status(200).json(result);
     } catch (error) {
       console.log(response);
       console.log(`ERROR=====> ${error.message}`, error);
 
-      return response.status(200).json({ message: "Something went wrong" });
+      return response.status(500).json({ message: "Something went wrong" });
     }
   }
 }

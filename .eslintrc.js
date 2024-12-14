@@ -1,12 +1,9 @@
 module.exports = {
-  global: {
-    __dirname: true,
-  },
   parser: "@typescript-eslint/parser",
   parserOptions: {
     project: "tsconfig.json",
     sourceType: "module",
-    project: ["./tsconfig.json", "./test/tsconfig.json"],
+    project: ["./tsconfig.json", "./tests/tsconfig.json"],
   },
   plugins: ["@typescript-eslint"],
   extends: [
