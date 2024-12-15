@@ -17,27 +17,21 @@ export interface SeverRequest extends Request {
  * @matheusicaro
  */
 const bodyParseToRawBody = (request: SeverRequest, _response: Response, next: NextFunction) => {
-  if (
-    [CONTENT_TYPES_ACCEPTED.TEXT_PLAIN, CONTENT_TYPES_ACCEPTED.XML].includes(
-      request.get("content-type"),
-    )
-  ) {
+  if (CONTENT_TYPES_ACCEPTED.TEXT_PLAIN === request.get("content-type")) {
     request.setEncoding("utf8");
-
-    let rawBody = "";
-
-    request.on("data", (chunk) => {
-      rawBody += chunk;
-    });
-
-    request.on("end", () => {
-      request.body = rawBody;
-
-      next();
-    });
-  } else {
-    next();
   }
+
+  let rawBody = "";
+
+  request.on("data", (chunk) => {
+    rawBody += chunk;
+  });
+
+  request.on("end", () => {
+    request.body = rawBody;
+
+    next();
+  });
 };
 
 export { bodyParseToRawBody };

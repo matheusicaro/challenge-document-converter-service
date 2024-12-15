@@ -4,7 +4,7 @@
  * The validation define if the chars passed are able to run a regex in a simple replace.
  * If that is not possible, means the sequency of chars are invalid in a regex the chars.
  *
- * @str - char
+ * @param str - char
  */
 export const isValidStringForRegex = (str: string) => {
   try {
@@ -34,7 +34,7 @@ export const isValidString = (string: string): boolean => {
   return !isEmptyOrInvalid(str);
 };
 
-export const removeBlankSpaces = (str): string => {
+export const removeBlankSpaces = (str: string): string => {
   return str.replace(/(\r\n|\n|\r|\s)/gm, "");
 };
 

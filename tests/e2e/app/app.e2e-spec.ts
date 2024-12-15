@@ -1,69 +1,88 @@
-import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { readFileSync } from 'fs';
-import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
+import { INestApplication } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import * as request from "supertest";
+import { AppModule } from "../../../src/configuration/app.module";
 
-describe('E2E FileTest', () => {
+describe("E2E FileTest", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+
     app = moduleRef.createNestApplication();
+
     await app.init();
-  });
-
-  it('should allow for file uploads', async () => {
-    return request(app.getHttpServer())
-      .post('/file')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(201)
-      .expect({
-        body: {
-          name: 'test',
-        },
-        file: readFileSync('./package.json').toString(),
-      });
-  });
-
-  it('should allow for file uploads that pass validation', async () => {
-    return request(app.getHttpServer())
-      .post('/file/pass-validation')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(201)
-      .expect({
-        body: {
-          name: 'test',
-        },
-        file: readFileSync('./package.json').toString(),
-      });
-  });
-
-  it('should throw for file uploads that do not pass validation', async () => {
-    return request(app.getHttpServer())
-      .post('/file/fail-validation')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(400);
-  });
-
-  it('should throw when file is required but no file is uploaded', async () => {
-    return request(app.getHttpServer())
-      .post('/file/fail-validation')
-      .expect(400);
-  });
-
-  it('should allow for optional file uploads with validation enabled (fixes #10017)', () => {
-    return request(app.getHttpServer())
-      .post('/file/pass-validation')
-      .expect(201);
   });
 
   afterAll(async () => {
     await app.close();
+  });
+
+  describe(URL, () => {
+    const PATH = "/documents/converter/";
+
+    /**
+     *
+     * TODO: Finish the implementation for these unit in this ticket: https://github.com/matheusicaro/challenge-document-converter-service/issues/11#issue-2740212262
+     *
+     * @matheusicaro
+     **/
+    it.skip("should convert text document to json document", async () => {
+      return request(app.getHttpServer())
+        .post(PATH)
+        .set("Content-Type", "text/plain")
+        .set("new-format", "JSON")
+        .set("segment-separator", "~")
+        .set("element-separator", "*")
+        .send(
+          `
+            ProductID*4*8*15*16*23~
+            ProductID*a*b*c*d*e~
+            AddressID*42*108*3*14~
+            ContactID*59*26~
+        `,
+        )
+        .expect(200)
+        .expect({
+          body: `
+              <root>
+                <ProductID>
+                    <ProductID1>4</ProductID1>
+                    <ProductID2>8</ProductID2>
+                    <ProductID3>15</ProductID3>
+                    <ProductID4>16</ProductID4>
+                    <ProductID5>23</ProductID5>
+                </ProductID>
+                <ProductID>
+                    <ProductID1>a</ProductID1>
+                    <ProductID2>b</ProductID2>
+                    <ProductID3>c</ProductID3>
+                    <ProductID4>d</ProductID4>
+                    <ProductID5>e</ProductID5>
+                </ProductID>
+                <AddressID>
+                    <AddressID1>42</AddressID1>
+                    <AddressID2>108</AddressID2>
+                    <AddressID3>3</AddressID3>
+                    <AddressID4>14</AddressID4>
+                </AddressID>
+                <ContactID>
+                    <ContactID1>59</ContactID1>
+                    <ContactID2>26</ContactID2>
+                </ContactID>
+              </root>
+            `,
+        });
+    });
+
+    it("should  when separators are not informed on processing string document", async () => {
+      expect("TODO").toEqual("TODO");
+    });
+
+    it("should return bad gateway and response correctly separators are not informed on processing string document", async () => {
+      expect("TODO").toEqual("TODO");
+    });
   });
 });

@@ -8,7 +8,7 @@ export abstract class Converter<DocumentConverted extends DocumentFile> {
   protected abstract documentFormat: DocumentFormat;
 
   public validate(entryFile: EntryFile): void {
-    if (entryFile.newFormat !== this.documentFormat) {
+    if (entryFile.currentFormat !== this.documentFormat) {
       throw new InvalidArgumentError(
         `Invalid format received. This converter can only convert documents to ${this.documentFormat}.`,
       );
@@ -18,10 +18,10 @@ export abstract class Converter<DocumentConverted extends DocumentFile> {
       throw new InvalidArgumentError("The entry file content is empty or invalid as a text");
     }
 
-    this.internalValidation(entryFile);
+    this.specificDocumentValidation(entryFile);
   }
 
-  protected abstract internalValidation(entryFile: EntryFile): void;
+  protected abstract specificDocumentValidation(entryFile: EntryFile): void;
 
   public abstract consume(fileContentAsString: string): DomainFile;
 

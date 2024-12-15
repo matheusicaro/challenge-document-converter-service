@@ -11,14 +11,14 @@ const mockedFunction = { runner: jest.fn() };
 class ExampleClass extends Converter<XmlDocument> {
   protected documentFormat: DocumentFormat = DocumentFormat.XML;
 
-  protected internalValidation(entryFile: EntryFile): void {
+  protected specificDocumentValidation(entryFile: EntryFile): void {
     mockedFunction.runner(entryFile);
   }
 
-  public consume(fileContentAsString: string): DomainFile {
+  public consume(_fileContentAsString: string): DomainFile {
     throw new Error("Method not implemented.");
   }
-  public convert(input: DomainFile): XmlDocument {
+  public convert(_input: DomainFile): XmlDocument {
     throw new Error("Method not implemented.");
   }
 }
@@ -27,7 +27,7 @@ describe("Converter", () => {
   const implementationClass = new ExampleClass();
 
   const defaultValidEntryFile = entryFileFactory.build({
-    newFormat: DocumentFormat.XML,
+    currentFormat: DocumentFormat.XML,
   });
 
   describe("validate", () => {
@@ -36,7 +36,7 @@ describe("Converter", () => {
      *
      * @matheusicaro
      */
-    it("should call the abstract internalValidation when the first validation pass", () => {
+    it("should call the abstract specificDocumentValidation when the first validation pass", () => {
       implementationClass.validate(defaultValidEntryFile);
 
       expect(mockedFunction.runner).toHaveBeenCalledTimes(1);
@@ -56,7 +56,7 @@ describe("Converter", () => {
 
     describe("invalid new format", () => {
       const invalidFormats = Object.values(DocumentFormat).filter(
-        (format) => format !== defaultValidEntryFile.newFormat,
+        (format) => format !== defaultValidEntryFile.currentFormat,
       );
 
       it.each(invalidFormats)("should throw error when %s new format is passed", (format) => {
