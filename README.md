@@ -1,17 +1,23 @@
 # challenge-document-converter-service
 
+___
 => Project board: https://github.com/users/matheusicaro/projects/6
+___
+
 <br>
 
-- [Intro](#intro)
-- [Challenge](#challenge)
-- [API Running Screen Shot](#api-running-screen-shot)
-- [Installation and Setup Instructions](#installation-and-setup-instructions)
-- [How it was developed](#how-it-was-developed)
+- [challenge-document-converter-service](#challenge-document-converter-service)
+  - [Intro](#intro)
+  - [Challenge](#challenge)
+  - [API Running Screen Shot](#api-running-screen-shot)
+  - [Installation and Setup Instructions](#installation-and-setup-instructions)
+  - [How it was developed](#how-it-was-developed)
     - [API design and logic](#api-design-and-logic)
     - [API Business logic Definitions](#api-business-logic-definitions)
+      - [Entities](#entities)
+      - [Providers](#providers)
     - [API Stack - Technologies used](#api-stack---technologies-used)
-- [FUTURE WORK](#future-work)
+  - [FUTURE WORK](#future-work)
 
 ## Intro
 
@@ -139,37 +145,61 @@ Example:
 <details>
 <summary>📸 1. Convert JSON document to XML</summary>
 
-[json-to-xml](./docs/json-to-xml.mov)
+<br>
+
+https://github.com/user-attachments/assets/fee97e33-18b8-4d10-a718-b550e5953fb4
+
+<br>
 </details>
 
 <details>
 <summary>📸 2. Convert JSON document to STRING</summary>
 
-[json-to-string](./docs/json-to-string.mov)
+<br>
+
+https://github.com/user-attachments/assets/c368cda6-7c7a-460f-bc67-5f047060d7f4
+
+<br.>
 </details>
 
 <details>
 <summary>📸 3. Convert XML document to JSON</summary>
 
-[xml-to-json](./docs/xml-to-json.mov)
+<br>
+
+https://github.com/user-attachments/assets/9df53b9b-5996-423d-a4c4-62f767fe4a06
+
+<br>
 </details>
 
 <details>
 <summary>📸 4. Convert XML document to STRING</summary>
 
-[xml-to-string](./docs/xml-to-string.mov)
+<br>
+
+https://github.com/user-attachments/assets/fb6e0331-9aa9-47de-8465-cf2721aa46ff
+
+<br>
 </details>
 
 <details>
 <summary>📸 5. Convert STRING document to JSON</summary>
 
-[string-to-json](./docs/string-to-json.mov)
+<br>
+
+https://github.com/user-attachments/assets/f7b4492d-5590-4fbf-9afd-7a4ea56e0b65
+
+<br>
 </details>
 
 <details>
 <summary>📸 6. Convert STRING document to XML</summary>
 
-[string-to-xml](./docs/string-to-xml.mov)
+<br>
+
+https://github.com/user-attachments/assets/b9ec63f5-a08b-40fb-a295-00a13576bd50
+
+<br>
 </details>
 
 </details>
@@ -186,25 +216,28 @@ Clone down this repository. You will need `node` and `npm` installed globally on
 <details>
 <summary>📸 </summary>
 
-![alt text](running-local.png)
+![alt text](/docs/running-local.png)
+
 </details>
 
 ## How it was developed
 
-#### API design and logic
+### API design and logic
 
 The process of convert a document from the type X to Y is designed to run in a pipelined, with a focus on making it scalable for new document conversions.
 
 <details>
 <summary>📸 Steps of converting the document:</summary>
 
-![alt text](./docs/api-design-logic.png)
+<br>
+
+![alt text](/docs/api-design-logic.png)
 
 </details>
 
-#### API Business logic Definitions
+### API Business logic Definitions
 
-##### Entities
+#### Entities
 
 - [entry-file.ts](src/application/domain/entities/entry-file.ts): Entity that defines the info required from the document received to be converted.
 - [domain-file.ts](src/application/domain/entities/domain-file.ts): Entity that defines a document known in business logic where is used to be converted to the new format
@@ -213,7 +246,7 @@ The process of convert a document from the type X to Y is designed to run in a p
   - [string-document.ts](src/application/domain/entities/document/string-document.ts)
   - [xml-document.ts](src/application/domain/entities/document/xml-document.ts)
 
-##### Providers
+#### Providers
 
 - [document-pipeline.provider.port.ts](src/application/domain/providers/document-pipeline/document-pipeline.provider.port.ts): The contract of the document pipeline convertor
   - [document-pipeline.provider.adapter.ts](src/application/domain/providers/document-pipeline/document-pipeline.provider.adapter.ts)
@@ -223,7 +256,7 @@ The process of convert a document from the type X to Y is designed to run in a p
   - [xml-document-converter.provider.adapter.ts](src/application/domain/providers/document-converters/xml-document-converter.provider.adapter.ts): xml document converter
   - [string-document-converter.provider.adapter.ts](src/application/domain/providers/document-converters/string-document-converter.provider.adapter.ts): string document converter
 
-#### API Stack - Technologies used
+### API Stack - Technologies used
 
 The service use a [hexagonal-architecture](https://docs.aws.amazon.com/prescriptive-guidance/latest/cloud-design-patterns/hexagonal-architecture.html) with the definition of Ports and Adapters for the providers.
 
