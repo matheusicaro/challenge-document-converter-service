@@ -13,8 +13,8 @@ async function bootstrap() {
   app.use(bodyParseToRawBody);
 
   const config = new DocumentBuilder()
-    .setTitle("Example API")
-    .setDescription("Example API description")
+    .setTitle("challenge-document-converter-service API")
+    .setDescription("API service to convert documents in different formats between them")
     .setVersion("1.0")
     .build();
 
