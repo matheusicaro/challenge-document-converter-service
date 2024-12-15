@@ -21,9 +21,25 @@ export abstract class Converter<DocumentConverted extends DocumentFile> {
     this.specificDocumentValidation(entryFile);
   }
 
+  /**
+   * This method must be implemented for specific validations of the document subject to converts extending this clause.
+   * This method will be called last in the validate method.
+   *
+   * @param entryFile
+   */
   protected abstract specificDocumentValidation(entryFile: EntryFile): void;
 
+  /**
+   * This method will consume the document buffer as string to the domain logic
+   *
+   * @param fileContentAsString: document content which is the same format of this class but as string to be consumed to a domain file
+   */
   public abstract consume(fileContentAsString: string): DomainFile;
 
+  /**
+   * This method will convert the domain file to the document converted which will be returned to the client
+   *
+   * @param domainFile: document known in the business logic
+   */
   public abstract convert(domainFile: DomainFile): DocumentConverted;
 }

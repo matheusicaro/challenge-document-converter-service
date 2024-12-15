@@ -12,6 +12,18 @@ import {
 import { InvalidStateError } from "matheusicaro-node-framework";
 
 class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
+  /**
+   * This converter is the pipeline logic to convert a document as entry file to a new document defined to the new format input
+   * The pipeline does:
+   *  1. get the current document converter from the current format
+   *  2. get the new document converter from the current format
+   *  3. the current document converter validate if the entry file is valid to be consumed to a domain document
+   *  4. the current document converter consume the entry file content => returns => domain document
+   *  5. the new document converter converts the domain document to the new document requested
+   *  6. the new document is returned
+   *
+   * @matheusicaro
+   */
   public convert(input: ConvertInput): ConvertResponse {
     const { currentFormat, newFormat } = input.entryFile;
 
@@ -44,6 +56,11 @@ class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
     };
   }
 
+  /**
+   * Returns the due converter from the document type
+   *
+   * @matheusicaro
+   */
   private buildConverter(
     documentFormat: DocumentFormat,
     separators: ConvertSeparators,
