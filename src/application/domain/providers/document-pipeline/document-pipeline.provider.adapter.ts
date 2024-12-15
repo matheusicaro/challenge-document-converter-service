@@ -6,8 +6,10 @@ import { XmlDocumentConverterProviderAdapter } from "../document-converters/xml-
 import {
   ConvertInput,
   ConvertResponse,
+  ConvertSeparators,
   DocumentPipelineProviderPort,
 } from "./document-pipeline.provider.port";
+import { InvalidStateError } from "matheusicaro-node-framework";
 
 class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
   constructor() {
@@ -15,23 +17,47 @@ class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
   }
 
   public convert(input: ConvertInput): ConvertResponse {
-    const converter = this.getConverter(input.entryFile.newFormat);
+    const { currentFormat, newFormat } = input.entryFile;
 
-    converter.validate(input.entryFile);
+    const converters = this.getConverters(currentFormat, newFormat, input.separators);
+    const currentDocConverter = converters.ofCurrentDocumentFormat;
+    const newDocConverter = converters.ofNewDocumentFormat;
 
-    const domainDocument = converter.consume(input.entryFile.content);
+    currentDocConverter.validate(input.entryFile);
 
-    const newDocument = converter.convert(domainDocument);
+    const domainDocument = currentDocConverter.consume(input.entryFile.content);
+
+    const newDocument = newDocConverter.convert(domainDocument);
 
     return {
       document: newDocument,
     };
   }
 
-  private getConverter(documentFormat: DocumentFormat): Converter<DocumentFile> {
+  private getConverters(
+    currentDocumentFormat: DocumentFormat,
+    newDocumentFormat: DocumentFormat,
+    separators: ConvertSeparators,
+  ): {
+    ofCurrentDocumentFormat: Converter<DocumentFile>;
+    ofNewDocumentFormat: Converter<DocumentFile>;
+  } {
+    return {
+      ofCurrentDocumentFormat: this.buildConverter(currentDocumentFormat, separators),
+      ofNewDocumentFormat: this.buildConverter(newDocumentFormat, separators),
+    };
+  }
+
+  private buildConverter(
+    documentFormat: DocumentFormat,
+    separators: ConvertSeparators,
+  ): Converter<DocumentFile> {
     switch (documentFormat) {
       case DocumentFormat.TEXT:
-        return new StringDocumentConverterProviderAdapter();
+        return new StringDocumentConverterProviderAdapter(
+          separators.bySegment,
+          separators.bySegment,
+        );
 
       case DocumentFormat.XML:
         return new XmlDocumentConverterProviderAdapter();
@@ -40,8 +66,9 @@ class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
         return new JsonDocumentConverterProviderAdapter();
 
       default:
-        // TODO add a better error handler here
-        throw new Error("INVALID ARGUMENT");
+        throw new InvalidStateError(
+          `Not found a converter for ${documentFormat} format. Investigation required`,
+        );
     }
   }
 }

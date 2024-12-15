@@ -3,18 +3,21 @@ import { JsonDocument } from "../../entities/document/json-document";
 import { Converter } from "../../../lib/converter";
 import { EntryFile } from "../../entities/entry-file";
 import { DocumentConverterProviderPort } from "./document-converter.provider.port";
+import { DocumentFormat } from "../../entities/document/document";
 
 class JsonDocumentConverterProviderAdapter
   extends Converter<JsonDocument>
   implements DocumentConverterProviderPort
 {
+  protected documentFormat: DocumentFormat;
+
   constructor() {
     super();
 
     console.log(`instance of ${JsonDocumentConverterProviderAdapter.name}`);
   }
 
-  public validate(input: EntryFile): void {
+  protected internalValidation(input: EntryFile): void {
     throw new Error("Method not implemented.");
   }
 
