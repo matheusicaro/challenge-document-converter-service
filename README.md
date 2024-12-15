@@ -3,18 +3,15 @@
 => Project board: https://github.com/users/matheusicaro/projects/6
 <br>
 
-- [challenge-document-converter-service](#challenge-document-converter-service)
-  - [Intro](#intro)
-  - [Challenge](#challenge)
-  - [API Running Screen Shot](#api-running-screen-shot)
-  - [Installation and Setup Instructions](#installation-and-setup-instructions)
-  - [How it was developed](#how-it-was-developed)
-      - [API design and logic](#api-design-and-logic)
-      - [API Business logic Definitions](#api-business-logic-definitions)
-        - [Entities](#entities)
-        - [Providers](#providers)
-      - [API Stack - Technologies used](#api-stack---technologies-used)
-  - [FUTURE WORK](#future-work)
+- [Intro](#intro)
+- [Challenge](#challenge)
+- [API Running Screen Shot](#api-running-screen-shot)
+- [Installation and Setup Instructions](#installation-and-setup-instructions)
+- [How it was developed](#how-it-was-developed)
+    - [API design and logic](#api-design-and-logic)
+    - [API Business logic Definitions](#api-business-logic-definitions)
+    - [API Stack - Technologies used](#api-stack---technologies-used)
+- [FUTURE WORK](#future-work)
 
 ## Intro
 
