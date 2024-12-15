@@ -141,26 +141,38 @@ Example:
 
 <details>
 <summary>📸 1. Convert JSON document to XML</summary>
+
+[json-to-xml](./docs/json-to-xml.mov)
 </details>
 
 <details>
 <summary>📸 2. Convert JSON document to STRING</summary>
+
+[json-to-string](./docs/json-to-string.mov)
 </details>
 
 <details>
 <summary>📸 3. Convert XML document to JSON</summary>
+
+[xml-to-json](./docs/xml-to-json.mov)
 </details>
 
 <details>
 <summary>📸 4. Convert XML document to STRING</summary>
+
+[xml-to-string](./docs/xml-to-string.mov)
 </details>
 
 <details>
 <summary>📸 5. Convert STRING document to JSON</summary>
+
+[string-to-json](./docs/string-to-json.mov)
 </details>
 
 <details>
 <summary>📸 6. Convert STRING document to XML</summary>
+
+[string-to-xml](./docs/string-to-xml.mov)
 </details>
 
 </details>
@@ -177,7 +189,7 @@ Clone down this repository. You will need `node` and `npm` installed globally on
 <details>
 <summary>📸 </summary>
 
-
+![alt text](running-local.png)
 </details>
 
 ## How it was developed

@@ -1,5 +1,4 @@
 export const XML_EXAMPLE_FILE = `
-<?xml version="1.0" encoding="UTF-8" ?>
 <root>
   <ProductID>
       <ProductID1>4</ProductID1>
