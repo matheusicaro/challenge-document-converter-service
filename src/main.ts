@@ -1,10 +1,14 @@
 import { NestFactory } from "@nestjs/core";
-import { AppModule } from "./configuration/app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+
+import { AppModule } from "./configuration/app.module";
 import { bodyParseToRawBody } from "./configuration/middlewares/raw-body.middleware";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true,
+    bodyParser: false,
+  });
 
   app.use(bodyParseToRawBody);
 
