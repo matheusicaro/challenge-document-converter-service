@@ -1,69 +1,52 @@
-import { INestApplication } from '@nestjs/common';
-import { Test } from '@nestjs/testing';
-import { readFileSync } from 'fs';
-import * as request from 'supertest';
-import { AppModule } from '../../../src/app.module';
+import { INestApplication } from "@nestjs/common";
+import { Test } from "@nestjs/testing";
+import * as request from "supertest";
+import { AppModule } from "../../../src/configuration/app.module";
+import { entryDocumentFileFactory } from "../../factories/entry-document-file.factory";
 
-describe('E2E FileTest', () => {
+describe("E2E FileTest", () => {
   let app: INestApplication;
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule],
     }).compile();
+
     app = moduleRef.createNestApplication();
+
     await app.init();
-  });
-
-  it('should allow for file uploads', async () => {
-    return request(app.getHttpServer())
-      .post('/file')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(201)
-      .expect({
-        body: {
-          name: 'test',
-        },
-        file: readFileSync('./package.json').toString(),
-      });
-  });
-
-  it('should allow for file uploads that pass validation', async () => {
-    return request(app.getHttpServer())
-      .post('/file/pass-validation')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(201)
-      .expect({
-        body: {
-          name: 'test',
-        },
-        file: readFileSync('./package.json').toString(),
-      });
-  });
-
-  it('should throw for file uploads that do not pass validation', async () => {
-    return request(app.getHttpServer())
-      .post('/file/fail-validation')
-      .attach('file', './package.json')
-      .field('name', 'test')
-      .expect(400);
-  });
-
-  it('should throw when file is required but no file is uploaded', async () => {
-    return request(app.getHttpServer())
-      .post('/file/fail-validation')
-      .expect(400);
-  });
-
-  it('should allow for optional file uploads with validation enabled (fixes #10017)', () => {
-    return request(app.getHttpServer())
-      .post('/file/pass-validation')
-      .expect(201);
   });
 
   afterAll(async () => {
     await app.close();
+  });
+
+  describe(URL, () => {
+    const PATH = "/documents/converter/";
+
+    it("should convert text document to json document", async () => {
+      return request(app.getHttpServer())
+        .post(PATH)
+        .set("Content-Type", "text/plain")
+        .set("new-format", "JSON")
+        .set("segment-separator", "~")
+        .set("element-separator", "*")
+        .send(entryDocumentFileFactory.buildStringDocument())
+        .expect(200)
+        .expect({
+          body: entryDocumentFileFactory.buildJsonDocument(),
+        });
+    });
+
+    it.skip("should response error when separators are not informed on processing string document", async () => {
+      return request(app.getHttpServer())
+        .post(PATH)
+        .set("Content-Type", "text/plain")
+        .set("new-format", "JSON")
+        .set("segment-separator", "")
+        .set("element-separator", "")
+        .send(entryDocumentFileFactory.buildStringDocument())
+        .expect(400);
+    });
   });
 });

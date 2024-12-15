@@ -8,7 +8,7 @@ export abstract class Converter<DocumentConverted extends DocumentFile> {
   protected abstract documentFormat: DocumentFormat;
 
   public validate(entryFile: EntryFile): void {
-    if (entryFile.newFormat !== this.documentFormat) {
+    if (entryFile.currentFormat !== this.documentFormat) {
       throw new InvalidArgumentError(
         `Invalid format received. This converter can only convert documents to ${this.documentFormat}.`,
       );

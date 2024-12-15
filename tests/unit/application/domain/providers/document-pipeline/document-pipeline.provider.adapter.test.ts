@@ -7,10 +7,10 @@ import { DocumentPipelineProviderAdapter } from "../../../../../../src/applicati
  * @matheusicaro
  **/
 describe("DocumentPipelineProviderAdapter", () => {
-  let provider: DocumentPipelineProviderAdapter;
+  let _provider: DocumentPipelineProviderAdapter;
 
   beforeEach(() => {
-    provider = new DocumentPipelineProviderAdapter();
+    _provider = new DocumentPipelineProviderAdapter();
   });
 
   describe("convert", () => {
