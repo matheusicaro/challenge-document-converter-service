@@ -13,7 +13,7 @@ export const isValidStringForRegex = (str: string) => {
     const result = `replace${str}done`.replace(regex, "_");
 
     return result === "replace_done";
-  } catch (error) {
+  } catch {
     /*
      * Invalid regular expression is thrown for specific chars.
      *  For example when "chars" is a question_mark(?), or comma(,), or star(*), etc.

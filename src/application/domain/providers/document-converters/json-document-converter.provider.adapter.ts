@@ -4,6 +4,7 @@ import { Converter } from "../../../lib/converter";
 import { EntryFile } from "../../entities/entry-file";
 import { DocumentConverterProviderPort } from "./document-converter.provider.port";
 import { DocumentFormat } from "../../entities/document/document";
+import { InvalidArgumentError } from "matheusicaro-node-framework";
 
 class JsonDocumentConverterProviderAdapter
   extends Converter<JsonDocument>
@@ -17,12 +18,14 @@ class JsonDocumentConverterProviderAdapter
     console.log(`instance of ${JsonDocumentConverterProviderAdapter.name}`);
   }
 
-  protected internalValidation(entryFile: EntryFile): void {
-    // no validation found yet to entry files
+  protected internalValidation(jsonEntryFile: EntryFile): void {
+    if (!this.isValidJson(jsonEntryFile.content)) {
+      throw new InvalidArgumentError("JSON entry file is a invalid JSON");
+    }
   }
 
   public consume(fileContentAsString: string): DomainFile {
-    const fileAsJson = this.jsonParse(fileContentAsString);
+    const fileAsJson: Record<string, string> = JSON.parse(fileContentAsString);
 
     const domainDocument: DomainFile = {
       separators: {
@@ -32,7 +35,7 @@ class JsonDocumentConverterProviderAdapter
       content: [],
     };
 
-    for (const segment of Object.entries(fileAsJson.content)) {
+    for (const segment of Object.entries(fileAsJson)) {
       const segmentName = segment[0];
       const subSegmentsList = segment[1];
       /**
@@ -79,12 +82,14 @@ class JsonDocumentConverterProviderAdapter
     };
   }
 
-  private jsonParse(fileContentAsString: string): Pick<JsonDocument, "content"> {
+  private isValidJson(fileContentAsString: string): boolean {
     try {
-      return { content: JSON.parse(fileContentAsString) };
-    } catch (error) {
+      const object = JSON.parse(fileContentAsString);
+
+      return Object.entries(object).length > 1;
+    } catch {
       // TODO: add handler/logger here track failed parses
-      return { content: {} };
+      return false;
     }
   }
 
