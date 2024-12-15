@@ -56,7 +56,7 @@ class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
       case DocumentFormat.TEXT:
         return new StringDocumentConverterProviderAdapter(
           separators.bySegment,
-          separators.bySegment,
+          separators.byElement,
         );
 
       case DocumentFormat.XML:
