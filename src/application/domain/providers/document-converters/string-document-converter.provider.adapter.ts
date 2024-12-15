@@ -35,6 +35,10 @@ class StringDocumentConverterProviderAdapter
         "The separators for segment and element are required to convert to a string document",
       );
     }
+
+    if (this.segmentSeparator === this.elementSeparator) {
+      throw new InvalidArgumentError("Segment and element separators can not be equals");
+    }
   }
 
   public consume(documentAsString: string): DomainFile {
