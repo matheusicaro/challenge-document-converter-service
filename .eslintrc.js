@@ -20,6 +20,26 @@ module.exports = {
     "@typescript-eslint/interface-name-prefix": "off",
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/no-explicit-any": "off",
+    /**
+     * Ignore lint when the argument not used has the slash as a prefix, exe:
+     *  not used args:
+     *   - (..., _arg) => no lint error
+     *   - (..., arg) => lint error
+     *
+     * @matheusicaro
+     */
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        args: "all",
+        argsIgnorePattern: "^_",
+        caughtErrors: "all",
+        caughtErrorsIgnorePattern: "^_",
+        destructuredArrayIgnorePattern: "^_",
+        varsIgnorePattern: "^_",
+        ignoreRestSiblings: true,
+      },
+    ],
   },
   settings: {
     "import/resolver": {

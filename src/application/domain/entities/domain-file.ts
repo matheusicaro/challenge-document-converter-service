@@ -1,7 +1,7 @@
 /**
  * A segment contains a name/key and the respective elements that define a segment
  */
-type Segment = {
+export type Segment = {
   name: string;
   elements: string[];
 };
