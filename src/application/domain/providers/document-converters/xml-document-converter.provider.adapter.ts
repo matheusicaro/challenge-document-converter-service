@@ -18,15 +18,13 @@ class XmlDocumentConverterProviderAdapter
 
   constructor() {
     super();
-
-    console.log(`instance of ${XmlDocumentConverterProviderAdapter.name}`);
   }
 
-  protected internalValidation(xmlAsEntryFile: EntryFile): void {
-    if (this.isValidXml(xmlAsEntryFile.content)) {
-      throw new InvalidArgumentError(
-        "The separators for segment and element are required to convert to a string document",
-      );
+  protected specificDocumentValidation(xmlAsEntryFile: EntryFile): void {
+    if (!this.isValidXml(xmlAsEntryFile.content)) {
+      throw new InvalidArgumentError("Invalid XML", {
+        userMessage: "The XML file is invalid, please check it and try again",
+      });
     }
   }
 

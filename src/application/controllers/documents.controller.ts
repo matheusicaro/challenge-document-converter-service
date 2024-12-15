@@ -7,17 +7,21 @@ import { DocumentPipelineProviderPort } from "../domain/providers/document-pipel
 import { DocumentsRoute } from "./docs/documents.controller.doc";
 import {
   mapContentTypeToDocumentFormat,
+  mapDocumentFormatToHeaderMap,
   mapNewDocumentFormatToDocumentFormat,
 } from "../lib/document-format-mapper";
 import { CONTENT_TYPE, HEADERS } from "../../configuration/app.constants";
 import { SeverRequest } from "../../configuration/middlewares/raw-body.middleware";
+import { InvalidRequestError, RestControllerBase } from "matheusicaro-node-framework";
 
 @Controller()
-export class DocumentsController {
+export class DocumentsController extends RestControllerBase {
   constructor(
     @Inject(ProviderTokens.DocumentConverterProvider)
     private documentConverterProvider: DocumentPipelineProviderPort,
-  ) {}
+  ) {
+    super();
+  }
 
   @Post("documents/converter")
   @ApiOperation(DocumentsRoute.CONVERTER.operation)
@@ -28,17 +32,22 @@ export class DocumentsController {
   public async converter(@Request() request: SeverRequest, @Response() response: ServerResponse) {
     try {
       const documentFormat = mapContentTypeToDocumentFormat(request.headers[CONTENT_TYPE]);
+
+      if (!documentFormat) {
+        throw new InvalidRequestError(`${CONTENT_TYPE} should be informed in the request`);
+      }
+
       const newDocumentFormat = mapNewDocumentFormatToDocumentFormat(
         request.headers[HEADERS.NEW_DOCUMENT_FORMAT],
       );
 
-      if (!documentFormat || !newDocumentFormat) {
-        // TODO refactoring here
-        console.log(`invalid args: ${documentFormat} => ${newDocumentFormat}`, request.headers);
-        throw new Error("invalid args");
+      if (!newDocumentFormat) {
+        throw new InvalidRequestError(
+          `${HEADERS.NEW_DOCUMENT_FORMAT} should be informed in the request`,
+        );
       }
 
-      const result = await this.documentConverterProvider.convert({
+      const { document } = await this.documentConverterProvider.convert({
         entryFile: {
           content: request.body.toString(),
           currentFormat: documentFormat,
@@ -50,12 +59,21 @@ export class DocumentsController {
         },
       });
 
-      return response.status(200).json(result);
-    } catch (error) {
-      console.log(response);
-      console.log(`ERROR=====> ${error.message}`, error);
+      const contentTypeHeaderValue = mapDocumentFormatToHeaderMap(document.format);
 
-      return response.status(500).json({ message: "Something went wrong" });
+      return response.type(contentTypeHeaderValue).status(200).json(document.content);
+    } catch (error) {
+      /**
+       * This handle is a method available from RestControllerBase from my lib
+       * ref: https://github.com/matheusicaro/matheusicaro-node-framework/tree/master?tab=readme-ov-file#controller-base
+       *
+       * @matheusicaro
+       */
+      this.handleErrorThenRespondFailedOnRequest({
+        error,
+        response,
+        setStatusCodeByErrorType: true,
+      });
     }
   }
 }

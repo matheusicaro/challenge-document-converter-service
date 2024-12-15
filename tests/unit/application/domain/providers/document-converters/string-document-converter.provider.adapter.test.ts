@@ -27,7 +27,7 @@ describe("StringDocumentConverterProviderAdapter", () => {
     });
 
     describe("when do throw an error", () => {
-      it("should throw error when a invalid segment separator was passed to the converter", () => {
+      it("Invalid separators", () => {
         const invalidDocument = entryFileFactory.build({
           currentFormat: DocumentFormat.TEXT,
         });
@@ -38,9 +38,10 @@ describe("StringDocumentConverterProviderAdapter", () => {
         );
 
         expect(() => invalidSegmentConverter.validate(invalidDocument)).toThrow(
-          new InvalidArgumentError(
-            "The separators for segment and element are required to convert to a string document",
-          ),
+          new InvalidArgumentError("Invalid separators", {
+            userMessage:
+              "The separators for segment and element are required for string document and were not informed, please check your request and try again",
+          }),
         );
       });
 
@@ -53,9 +54,10 @@ describe("StringDocumentConverterProviderAdapter", () => {
         );
 
         expect(() => invalidSegmentConverter.validate(invalidDocument)).toThrow(
-          new InvalidArgumentError(
-            "The separators for segment and element are required to convert to a string document",
-          ),
+          new InvalidArgumentError("Invalid separators", {
+            userMessage:
+              "The separators for segment and element are required for string document and were not informed, please check your request and try again",
+          }),
         );
       });
 
@@ -157,7 +159,10 @@ describe("StringDocumentConverterProviderAdapter", () => {
       const segmentSeparator = "-";
       const elementSeparator = "|";
 
-      const stringDocument = converter.convert({
+      const stringDocument = new StringDocumentConverterProviderAdapter(
+        segmentSeparator,
+        elementSeparator,
+      ).convert({
         separators: {
           bySegment: segmentSeparator,
           byElement: elementSeparator,
@@ -182,7 +187,10 @@ describe("StringDocumentConverterProviderAdapter", () => {
       const segmentSeparator = "<end>\n";
       const elementSeparator = ", value:";
 
-      const stringDocument = converter.convert({
+      const stringDocument = new StringDocumentConverterProviderAdapter(
+        segmentSeparator,
+        elementSeparator,
+      ).convert({
         separators: {
           bySegment: segmentSeparator,
           byElement: elementSeparator,

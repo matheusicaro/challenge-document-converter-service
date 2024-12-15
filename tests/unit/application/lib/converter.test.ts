@@ -11,7 +11,7 @@ const mockedFunction = { runner: jest.fn() };
 class ExampleClass extends Converter<XmlDocument> {
   protected documentFormat: DocumentFormat = DocumentFormat.XML;
 
-  protected internalValidation(entryFile: EntryFile): void {
+  protected specificDocumentValidation(entryFile: EntryFile): void {
     mockedFunction.runner(entryFile);
   }
 
@@ -36,7 +36,7 @@ describe("Converter", () => {
      *
      * @matheusicaro
      */
-    it("should call the abstract internalValidation when the first validation pass", () => {
+    it("should call the abstract specificDocumentValidation when the first validation pass", () => {
       implementationClass.validate(defaultValidEntryFile);
 
       expect(mockedFunction.runner).toHaveBeenCalledTimes(1);

@@ -12,10 +12,6 @@ import {
 import { InvalidStateError } from "matheusicaro-node-framework";
 
 class DocumentPipelineProviderAdapter implements DocumentPipelineProviderPort {
-  constructor() {
-    console.log(`instance of ${DocumentPipelineProviderAdapter.name}`);
-  }
-
   public convert(input: ConvertInput): ConvertResponse {
     const { currentFormat, newFormat } = input.entryFile;
 

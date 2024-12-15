@@ -14,13 +14,13 @@ class JsonDocumentConverterProviderAdapter
 
   constructor() {
     super();
-
-    console.log(`instance of ${JsonDocumentConverterProviderAdapter.name}`);
   }
 
-  protected internalValidation(jsonEntryFile: EntryFile): void {
+  protected specificDocumentValidation(jsonEntryFile: EntryFile): void {
     if (!this.isValidJson(jsonEntryFile.content)) {
-      throw new InvalidArgumentError("JSON entry file is a invalid JSON");
+      throw new InvalidArgumentError("Invalid Json", {
+        userMessage: "The JSON input is invalid, please check it and try again",
+      });
     }
   }
 

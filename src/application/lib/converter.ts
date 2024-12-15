@@ -18,10 +18,10 @@ export abstract class Converter<DocumentConverted extends DocumentFile> {
       throw new InvalidArgumentError("The entry file content is empty or invalid as a text");
     }
 
-    this.internalValidation(entryFile);
+    this.specificDocumentValidation(entryFile);
   }
 
-  protected abstract internalValidation(entryFile: EntryFile): void;
+  protected abstract specificDocumentValidation(entryFile: EntryFile): void;
 
   public abstract consume(fileContentAsString: string): DomainFile;
 

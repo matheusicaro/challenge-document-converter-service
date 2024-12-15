@@ -29,11 +29,12 @@ class StringDocumentConverterProviderAdapter
     super();
   }
 
-  protected internalValidation(_entryFile: EntryFile): void {
+  protected specificDocumentValidation(_entryFile?: EntryFile): void {
     if (!isValidString(this.segmentSeparator) || !isValidString(this.elementSeparator)) {
-      throw new InvalidArgumentError(
-        "The separators for segment and element are required to convert to a string document",
-      );
+      throw new InvalidArgumentError("Invalid separators", {
+        userMessage:
+          "The separators for segment and element are required for string document and were not informed, please check your request and try again",
+      });
     }
 
     if (this.segmentSeparator === this.elementSeparator) {
@@ -69,15 +70,15 @@ class StringDocumentConverterProviderAdapter
   }
 
   public convert(domainDocument: DomainFile): StringDocument {
-    const separators = domainDocument.separators;
+    this.specificDocumentValidation();
 
     const segments: string[] = [];
 
     for (const segment of domainDocument.content) {
-      const elementsAsString = segment.elements.join(separators.byElement);
+      const elementsAsString = segment.elements.join(this.elementSeparator);
 
       segments.push(
-        `${segment.name}${separators.byElement}${elementsAsString}${separators.bySegment}`,
+        `${segment.name}${this.elementSeparator}${elementsAsString}${this.segmentSeparator}`,
       );
     }
 
